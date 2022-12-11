@@ -6,7 +6,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -99,7 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'Pay with Razorpay',
             ),
-            ElevatedButton(onPressed: (){
+            ElevatedButton(
+                onPressed: () {
                   Razorpay razorpay = Razorpay();
                   var options = {
                     'key': 'rzp_live_ILgsfZCZoFIKMb',
@@ -108,14 +109,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     'description': 'Fine T-Shirt',
                     'retry': {'enabled': true, 'max_count': 1},
                     'send_sms_hash': true,
-                    'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'},
+                    'prefill': {
+                      'contact': '8888888888',
+                      'email': 'test@razorpay.com'
+                    },
                     'external': {
                       'wallets': ['paytm']
                     }
                   };
-                  razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentErrorResponse);
-                  razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccessResponse);
-                  razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWalletSelected);
+                  razorpay.on(
+                      Razorpay.EVENT_PAYMENT_ERROR, handlePaymentErrorResponse);
+                  razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
+                      handlePaymentSuccessResponse);
+                  razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
+                      handleExternalWalletSelected);
                   razorpay.open(options);
                 },
                 child: const Text("Pay with Razorpay")),
@@ -130,35 +137,38 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void handlePaymentErrorResponse(PaymentFailureResponse response){
+  void handlePaymentErrorResponse(PaymentFailureResponse response) {
     /*
     * PaymentFailureResponse contains three values:
     * 1. Error Code
     * 2. Error Description
     * 3. Metadata
     * */
-    showAlertDialog(context, "Payment Failed", "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
+    showAlertDialog(context, "Payment Failed",
+        "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
   }
 
-  void handlePaymentSuccessResponse(PaymentSuccessResponse response){
+  void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
     /*
     * Payment Success Response contains three values:
     * 1. Order ID
     * 2. Payment ID
     * 3. Signature
     * */
-    showAlertDialog(context, "Payment Successful", "Payment ID: ${response.paymentId}");
+    showAlertDialog(
+        context, "Payment Successful", "Payment ID: ${response.paymentId}");
   }
 
-  void handleExternalWalletSelected(ExternalWalletResponse response){
-    showAlertDialog(context, "External Wallet Selected", "${response.walletName}");
+  void handleExternalWalletSelected(ExternalWalletResponse response) {
+    showAlertDialog(
+        context, "External Wallet Selected", "${response.walletName}");
   }
 
-  void showAlertDialog(BuildContext context, String title, String message){
+  void showAlertDialog(BuildContext context, String title, String message) {
     // set up the buttons
     Widget continueButton = ElevatedButton(
       child: const Text("Continue"),
-      onPressed:  () {},
+      onPressed: () {},
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
